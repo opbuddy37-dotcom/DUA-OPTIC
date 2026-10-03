@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1769d2"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="manifest.webmanifest">
 <title>DUA OPTICS — Optical Records</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = 'https://jhasfccmyotddzoijbrg.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_4v_M2quXF8Sdoqn_QVu3vA_X5mkPJmH';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
+</script>
 <style>
 :root{--blue:#1769d2;--ink:#142033;--muted:#6b7687;--bg:#f5f7fb;--card:#fff;--line:#e5e9f0;--danger:#b42318}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
