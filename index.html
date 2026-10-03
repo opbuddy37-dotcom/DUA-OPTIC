@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#1769d2"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="manifest.webmanifest">
+<title>DUA OPTICS — Optical Records</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--blue:#1769d2;--ink:#142033;--muted:#6b7687;--bg:#f5f7fb;--card:#fff;--line:#e5e9f0;--danger:#b42318}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:flex;min-height:100vh}.side{width:250px;background:#fff;border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh}.brand{font-size:24px;font-weight:800;letter-spacing:.5px;padding:8px 12px 25px}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:600;margin-top:4px}
+.nav button{display:block;width:100%;border:0;background:transparent;text-align:left;padding:13px 14px;border-radius:12px;margin:3px 0;color:#465166}.nav button.active,.nav button:hover{background:#edf5ff;color:var(--blue);font-weight:700}
+.main{flex:1;min-width:0}.top{height:72px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:4}.top h1{font-size:21px;margin:0}.top .pill{background:#eef6ff;color:var(--blue);padding:8px 12px;border-radius:20px;font-size:12px;font-weight:700}
+.wrap{max-width:1200px;margin:auto;padding:28px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 2px 8px #18223008}.stat .n{font-size:28px;font-weight:800;margin-top:7px}.muted{color:var(--muted);font-size:13px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.btn{border:0;border-radius:10px;padding:11px 15px;font-weight:700}.primary{background:var(--blue);color:#fff}.outline{background:#fff;border:1px solid var(--line);color:#334155}.danger{color:var(--danger);border:1px solid #f1c5c1;background:#fff}
+.search{width:100%;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:#fff;margin:12px 0 18px}
+.list{display:grid;gap:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:15px;background:#fff;border:1px solid var(--line);border-radius:13px}.row strong{display:block}.row .right{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.modal{position:fixed;inset:0;background:#09111d66;display:none;align-items:flex-start;justify-content:center;padding:20px;z-index:10;overflow:auto}.modal.show{display:flex}.modalbox{background:#fff;width:min(100%,980px);border-radius:18px;padding:24px;margin:20px 0}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.x{border:0;background:#f2f4f7;border-radius:9px;padding:8px 11px}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}.field label{display:block;font-size:12px;font-weight:700;color:#536072;margin-bottom:6px}.field input,.field select,.field textarea{width:100%;border:1px solid #d9dee7;border-radius:10px;padding:11px;background:#fff}.field textarea{min-height:80px;resize:vertical}.full{grid-column:1/-1}.section{margin:22px 0 10px;font-size:16px;font-weight:800;border-bottom:1px solid var(--line);padding-bottom:8px}
+.choices{display:flex;gap:8px;flex-wrap:wrap}.choice{border:1px solid #d9dee7;background:#fff;border-radius:9px;padding:9px 12px}.choice.on{background:#eaf3ff;border-color:#76aaf0;color:#0f5dbf;font-weight:700}
+.rxgrid{display:grid;grid-template-columns:120px repeat(2,1fr);gap:7px;align-items:center}.rxgrid input{width:100%}.history{display:grid;gap:12px;margin-top:15px}.visit{border:1px solid var(--line);border-radius:14px;padding:16px;background:#fff}.badge{font-size:11px;background:#eef6ff;color:#1459a8;border-radius:20px;padding:5px 8px;font-weight:700}.profilehead{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.photo{width:100px;height:100px;border-radius:12px;object-fit:cover;border:1px solid var(--line)}
+.notice{padding:12px 14px;background:#fff8e6;border:1px solid #f1dfaa;border-radius:12px;color:#73540a;font-size:13px;margin:15px 0}
+@media(max-width:800px){.side{width:74px;padding:12px 8px}.brand{font-size:0;text-align:center}.brand:after{content:'DO';font-size:22px}.brand small{display:none}.nav button{font-size:0;text-align:center}.nav button:first-letter{font-size:20px}.top{padding:0 16px}.wrap{padding:18px}.grid{grid-template-columns:repeat(2,1fr)}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.rxgrid{grid-template-columns:70px repeat(2,1fr)}.profilehead{flex-direction:column}}
+</style>
+</head>
+<body>
+<div id="authScreen" style="position:fixed;inset:0;background:#f5f7fb;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px">
+<div class="card" style="width:min(100%,420px);padding:28px">
+<h2 style="margin-top:0">DUA OPTICS Cloud</h2>
+<p class="muted">Enter your DUA OPTICS access code. No email or password is required.</p>
+<div class="field" style="margin:12px 0"><label>DUA OPTICS Access Code</label><input id="workspaceCode" type="password" autocomplete="off" placeholder="Enter access code"></div>
+<div class="actions"><button class="btn primary" onclick="connectCloud()">Connect & Open Records</button></div>
+<div id="authMsg" class="notice" style="display:none"></div>
+<p class="muted" style="margin-bottom:0">Use the same access code on every phone or computer. All devices will open the same cloud records.</p>
+</div></div>
+<div class="app">
+<aside class="side">
+<div class="brand">DUA OPTICS<small>Optical Records & Management</small></div>
+<nav class="nav">
+<button class="active" onclick="page('dashboard')">📊 Dashboard</button>
+<button onclick="page('customers')">👥 Customers</button>
+<button onclick="openCustomer()">➕ New Customer</button>
+<button onclick="page('prescriptions')">👁 Prescriptions</button>
+<button onclick="page('orders')">🧾 Orders & Payments</button>
+<button onclick="page('backup')">💾 Backup & Data</button>
+</nav>
+</aside>
+<main class="main">
+<header class="top"><h1 id="title">Dashboard</h1><span class="pill">DUA OPTICS</span></header>
+<section class="wrap" id="content"></section>
+</main></div>
+
+<div class="modal" id="modal"><div class="modalbox">
+<div class="modalhead"><h2 id="modalTitle">New Customer</h2><button class="x" onclick="closeModal()">✕</button></div>
+<div class="notice"><strong>Cloud synced:</strong> records are saved locally first and then synced to the shared DUA OPTICS cloud. Use the same access code on every device. You can edit records later and the changes sync back to the cloud.</div>
+<form id="form">
+<input type="hidden" id="editId"><input type="hidden" id="customerId">
+<div class="section">Customer details</div><div class="formgrid">
+<div class="field"><label>Customer name *</label><input id="name" required></div>
+<div class="field"><label>Mobile number *</label><input id="phone" required></div>
+<div class="field"><label>Email</label><input id="email" type="email"></div>
+<div class="field"><label>Date of birth</label><input id="dob" type="date"></div>
+<div class="field full"><label>Address</label><input id="address"></div>
+</div>
+
+<div class="section">Prescription</div>
+<div class="formgrid">
+<div class="field"><label>Prescription name *</label><input id="rxname" placeholder="e.g. Distance — 2026" required></div>
+<div class="field"><label>Prescription date</label><input id="rxdate" type="date"></div>
+<div class="field"><label>Expiry date</label><input id="rxexpiry" type="date"></div>
+<div class="field"><label>Prescribed by</label><input id="doctor" placeholder="Optometrist / Ophthalmologist"></div>
+<div class="field"><label>Prescription for profile</label><input id="profile" placeholder="Self / Child / Other"></div>
+<div class="field"><label><input id="reminder" type="checkbox" style="width:auto"> Renewal reminder</label></div>
+<div class="field full"><label>Lens type</label><div class="choices" id="lensTypes"></div></div>
+</div>
+
+<div class="section">Power</div>
+<div class="rxgrid">
+<div></div><strong>Right</strong><strong>Left</strong>
+<label>Sphere</label><input id="rsph" value="0.00"><input id="lsph" value="0.00">
+<label>Cylinder</label><input id="rcyl" value="0.00"><input id="lcyl" value="0.00">
+<label>Axis</label><input id="raxis" value="0"><input id="laxis" value="0">
+<label>Add</label><input id="radd" value="0.00"><input id="ladd" value="0.00">
+</div>
+<div class="formgrid" style="margin-top:12px">
+<div class="field"><label>Prism</label><input id="prism" placeholder="Optional"></div>
+<div class="field"><label>Pupillary Distance (PD)</label><input id="pd" placeholder="Optional"></div>
+<div class="field"><label>Back Vertex Distance (BVD)</label><input id="bvd" placeholder="Optional"></div>
+<div class="field"><label>Lens material / index</label><input id="material" placeholder="e.g. 1.56 / 1.67"></div>
+<div class="field full"><label>Recommendations</label><div class="choices" id="recs"></div></div>
+<div class="field full"><label>Notes</label><textarea id="notes" placeholder="Add your notes here"></textarea></div>
+<div class="field"><label>Attach photo / Rx image</label><input id="photo" type="file" accept="image/*"></div>
+<div class="field"><label>Order / payment total</label><input id="total" type="number" min="0" step="0.01" value="0"></div>
+<div class="field"><label>Amount paid</label><input id="paid" type="number" min="0" step="0.01" value="0"></div>
+<div class="field"><label>Issue / complaint</label><input id="issue" placeholder="Optional"></div>
+<div class="field"><label>Order status</label><select id="status"><option>New</option><option>In Progress</option><option>Ready</option><option>Delivered</option><option>Pending</option></select></div>
+</div>
+<div class="actions"><button class="btn primary" type="submit">Save Customer Record</button><button class="btn outline" type="button" onclick="closeModal()">Cancel</button></div>
+</form></div></div>
+
+<script>
+const SUPABASE_URL='https://ofchsfhcgjgdljoasczy.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_S_rvNhLBIffWHky4J--jLA_Qg7rg7t';
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let cloudUser=null;
+let cloudReady=false;
+let cloudBusy=false;
+let workspaceJoined=false;
+const WORKSPACE_FLAG='dua_optics_workspace_joined_v1';
+
+function authMessage(msg,isError=false){const el=document.getElementById('authMsg');if(!el)return;el.textContent=msg;el.style.display='block';el.style.background=isError?'#fff1f0':'#eef8ee';el.style.borderColor=isError?'#f1c5c1':'#b8dfb8';el.style.color=isError?'#8b1e18':'#245b2a';}
+function showAuth(){document.getElementById('authScreen').style.display='flex';}
+function hideAuth(){document.getElementById('authScreen').style.display='none';}
+async function connectCloud(){
+ const code=document.getElementById('workspaceCode').value.trim();
+ if(!code){authMessage('Enter the DUA OPTICS access code.',true);return;}
+ authMessage('Connecting securely…');
+ try{
+   let {data,error}=await supabaseClient.auth.getSession();
+   if(error)throw error;
+   if(!data.session){
+     const r=await supabaseClient.auth.signInAnonymously();
+     if(r.error)throw r.error;
+     data={session:r.data.session};
+   }
+   cloudUser=data.session.user;
+   const joined=await supabaseClient.rpc('join_dua_workspace',{p_code:code});
+   if(joined.error)throw joined.error;
+   workspaceJoined=true;localStorage.setItem(WORKSPACE_FLAG,'1');cloudReady=true;
+   authMessage('Connected. Loading cloud records…');
+   await pullCloudData();
+   hideAuth();page(currentPage);updateCloudStatus('Cloud connected ✓ • '+db.customers.length+' record(s)');
+ }catch(e){console.error(e);cloudReady=false;authMessage('Could not connect: '+(e.message||e),true);}
+}
+async function finishExistingCloud(){
+ try{
+   let {data,error}=await supabaseClient.auth.getSession();if(error)throw error;
+   if(!data.session){showAuth();return;}
+   cloudUser=data.session.user;
+   if(localStorage.getItem(WORKSPACE_FLAG)!=='1'){showAuth();return;}
+   const check=await supabaseClient.rpc('get_dua_workspace');
+   if(check.error||!check.data){localStorage.removeItem(WORKSPACE_FLAG);showAuth();return;}
+   workspaceJoined=true;cloudReady=true;await pullCloudData();hideAuth();page(currentPage);updateCloudStatus('Cloud connected ✓ • '+db.customers.length+' record(s)');
+ }catch(e){console.error(e);showAuth();authMessage('Cloud setup problem: '+(e.message||e),true);}
+}
+async function signOutCloud(){await supabaseClient.auth.signOut();localStorage.removeItem(WORKSPACE_FLAG);cloudUser=null;cloudReady=false;workspaceJoined=false;showAuth();}
+async function pullCloudData(){
+ if(!cloudReady||!workspaceJoined)return;
+ const {data,error}=await supabaseClient.from('dua_customer_records_shared').select('id,data,updated_at').order('updated_at',{ascending:true});
+ if(error)throw error;
+ const map=new Map(db.customers.map(c=>[c.id,c]));
+ for(const row of (data||[])){if(row.data)map.set(row.id,row.data);}
+ db.customers=[...map.values()];persist();
+}
+async function syncCustomerCloud(c){
+ if(!cloudReady||!workspaceJoined)throw new Error('Cloud is not connected');
+ const {error}=await supabaseClient.from('dua_customer_records_shared').upsert({id:c.id,data:c,updated_at:new Date().toISOString()},{onConflict:'id'});
+ if(error)throw error;
+}
+async function syncAllCloud(show=true){
+ if(!cloudReady||!workspaceJoined){if(show)alert('Connect DUA OPTICS Cloud first.');return false;}
+ if(cloudBusy)return false;cloudBusy=true;
+ try{for(const c of db.customers)await syncCustomerCloud(c);updateCloudStatus('All records synced ✓');return true;}
+ catch(e){console.error(e);updateCloudStatus('Cloud sync failed: '+e.message,true);if(show)alert('Cloud sync failed: '+e.message);return false;}
+ finally{cloudBusy=false;}
+}
+function updateCloudStatus(msg,err=false){const el=document.getElementById('cloudStatus');if(el){el.textContent=msg||('Cloud connected • '+db.customers.length+' local customer(s)');el.style.background=err?'#fff1f0':'#eef8ee';el.style.borderColor=err?'#f1c5c1':'#b8dfb8';el.style.color=err?'#8b1e18':'#245b2a';}}
+function initCloud(){finishExistingCloud();}
+
+const KEY='dua_optics_lifetime_v2';
+const lensTypes=['Distance','Reading','Computer','Trifocal','Bifocal','Progressive'];
+const recs=['Anti-Reflective','UV Protection','Tinted','Photochromic/Transitions','Polarized (Brown/Grey)','Scratch-Resistant','Anti-Fog','High Index','Trivex','Polycarbonate','Plastic','Glass','Blue Light Filter','Hydrophobic/Oleophobic Coating','Mirror Coating'];
+let db=JSON.parse(localStorage.getItem(KEY)||'{"customers":[],"audit":[]}');
+let currentPage='dashboard';
+
+function persist(){localStorage.setItem(KEY,JSON.stringify(db));}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function money(n){return '₹'+Number(n||0).toLocaleString('en-IN')}
+function page(p){
+ currentPage=p; document.querySelectorAll('.nav button').forEach(b=>b.classList.remove('active'));
+ const map={dashboard:0,customers:1,prescriptions:3,orders:4,backup:5}; if(map[p]!=null)document.querySelectorAll('.nav button')[map[p]].classList.add('active');
+ document.getElementById('title').textContent={dashboard:'Dashboard',customers:'Customers',prescriptions:'Prescriptions',orders:'Orders & Payments',backup:'Backup & Data'}[p];
+ if(p==='dashboard')dashboard(); if(p==='customers')customersPage(); if(p==='prescriptions')rxPage(); if(p==='orders')ordersPage(); if(p==='backup')backupPage();
+}
+function dashboard(){
+ const cs=db.customers, orders=cs.flatMap(c=>c.visits||[]), paid=orders.reduce((a,v)=>a+ +v.paid,0), total=orders.reduce((a,v)=>a+ +v.total,0);
+ document.getElementById('content').innerHTML=`<div class="grid">
+ <div class="card stat"><div class="muted">Customers</div><div class="n">${cs.length}</div></div>
+ <div class="card stat"><div class="muted">Prescriptions</div><div class="n">${orders.filter(v=>v.rx).length}</div></div>
+ <div class="card stat"><div class="muted">Total billed</div><div class="n">${money(total)}</div></div>
+ <div class="card stat"><div class="muted">Outstanding</div><div class="n">${money(total-paid)}</div></div></div>
+ <div class="actions"><button class="btn primary" onclick="openCustomer()">＋ Add customer</button><button class="btn outline" onclick="page('customers')">Search customers</button><button class="btn outline" onclick="backupJSON()">Export backup</button></div>
+ <div class="card"><h3>Recent activity</h3><div class="list">${orders.slice(-8).reverse().map(v=>`<div class="row"><div><strong>${esc(v.customerName)}</strong><span class="muted">${esc(v.date||'')} • ${esc(v.rx?.lensType?.join(', ')||'Prescription')}</span></div><div><span class="badge">${esc(v.status)}</span></div></div>`).join('')||'<p class="muted">No records yet.</p>'}</div></div>`;
+}
+function customersPage(){
+ document.getElementById('content').innerHTML=`<div class="card"><h3>Customer records</h3><input class="search" id="q" placeholder="Search by name, mobile or email" oninput="renderCustomerList()"><div id="customerList"></div></div>`;
+ renderCustomerList();
+}
+function renderCustomerList(){
+ const q=(document.getElementById('q')?.value||'').toLowerCase();
+ const rows=db.customers.filter(c=>[c.name,c.phone,c.email].join(' ').toLowerCase().includes(q));
+ document.getElementById('customerList').innerHTML=rows.map(c=>`<div class="row"><div><strong>${esc(c.name)}</strong><div class="muted">${esc(c.phone)} • ${(c.visits||[]).length} record(s)</div></div><div class="right"><button class="btn outline" onclick="viewCustomer('${c.id}')">Open</button><button class="btn outline" onclick="editCustomer('${c.id}')">Edit</button></div></div>`).join('')||'<p class="muted">No matching customers.</p>';
+}
+function viewCustomer(id){
+ const c=db.customers.find(x=>x.id===id); if(!c)return;
+ document.getElementById('title').textContent=c.name;
+ document.getElementById('content').innerHTML=`<div class="card"><div class="profilehead"><div><h2 style="margin:0">${esc(c.name)}</h2><p class="muted">${esc(c.phone)} ${c.email?'• '+esc(c.email):''}</p><p class="muted">${esc(c.address||'')}</p></div><div class="actions"><button class="btn primary" onclick="newVisit('${c.id}')">＋ New prescription / visit</button><button class="btn outline" onclick="editCustomer('${c.id}')">Edit customer</button></div></div>
+ <div class="history">${(c.visits||[]).slice().reverse().map(v=>visitHTML(c,v)).join('')||'<p class="muted">No visits recorded.</p>'}</div></div>`;
+}
+function visitHTML(c,v){
+ const r=v.rx||{}; return `<div class="visit"><div class="profilehead"><div><strong>${esc(v.date||'')}</strong><span class="badge" style="margin-left:8px">${esc(v.status||'New')}</span><div class="muted" style="margin-top:6px">${esc(r.name||'Prescription')} • ${esc((r.lensType||[]).join(', '))}</div></div><div class="right"><button class="btn outline" onclick="editVisit('${c.id}','${v.id}')">Edit</button></div></div>
+ <div style="margin-top:14px"><strong>Power</strong><div class="muted">R SPH ${esc(r.rsph)} / CYL ${esc(r.rcyl)} / AXIS ${esc(r.raxis)} / ADD ${esc(r.radd)} &nbsp; | &nbsp; L SPH ${esc(r.lsph)} / CYL ${esc(r.lcyl)} / AXIS ${esc(r.laxis)} / ADD ${esc(r.ladd)}</div></div>
+ <div class="muted" style="margin-top:7px">PD: ${esc(r.pd||'—')} • BVD: ${esc(r.bvd||'—')} • Prism: ${esc(r.prism||'—')}</div>
+ <div style="margin-top:10px">Recommendations: ${esc((r.recs||[]).join(', ')||'None')}</div>
+ <div class="muted" style="margin-top:8px">Total ${money(v.total)} • Paid ${money(v.paid)} • Balance ${money(+v.total-+v.paid)} ${v.issue?'• Issue: '+esc(v.issue):''}</div>
+ ${v.photo?`<img class="photo" src="${v.photo}" style="margin-top:10px">`:''}${v.notes?`<div style="margin-top:10px"><strong>Notes:</strong> ${esc(v.notes)}</div>`:''}</div>`;
+}
+function rxPage(){ document.getElementById('content').innerHTML=`<div class="card"><h3>Prescription records</h3><input class="search" placeholder="Search customer..." oninput="filterRx(this.value)"><div id="rxList"></div></div>`; filterRx('');}
+function filterRx(q){q=q.toLowerCase();let a=[];db.customers.forEach(c=>(c.visits||[]).forEach(v=>{if(v.rx && (c.name+' '+c.phone+' '+v.rx.name).toLowerCase().includes(q))a.push({c,v})}));document.getElementById('rxList').innerHTML=a.reverse().map(x=>`<div class="row"><div><strong>${esc(x.c.name)}</strong><div class="muted">${esc(x.v.rx.name)} • ${esc((x.v.rx.lensType||[]).join(', '))}</div></div><button class="btn outline" onclick="viewCustomer('${x.c.id}')">Open</button></div>`).join('')||'<p class="muted">No prescriptions found.</p>'}
+function ordersPage(){let a=[];db.customers.forEach(c=>(c.visits||[]).forEach(v=>a.push({c,v})));document.getElementById('content').innerHTML=`<div class="card"><h3>Orders & payments</h3><div class="list">${a.reverse().map(x=>`<div class="row"><div><strong>${esc(x.c.name)}</strong><div class="muted">${esc(x.v.date)} • ${esc(x.v.status)}</div></div><div><strong>${money(x.v.total-x.v.paid)}</strong><div class="muted">Balance</div></div><button class="btn outline" onclick="viewCustomer('${x.c.id}')">Open</button></div>`).join('')||'<p class="muted">No orders yet.</p>'}</div></div>`}
+function backupPage(){document.getElementById('content').innerHTML=`<div class="card"><h3>Cloud & Backup</h3><p class="muted">Cloud sync is active. Every device connected with the same DUA OPTICS access code opens the same customer records.</p><div class="actions"><button class="btn primary" onclick="syncAllCloud()">☁ Sync to cloud now</button><button class="btn outline" onclick="backupJSON()">Download backup</button><label class="btn outline">Restore backup <input type="file" accept=".json" onchange="restoreJSON(event)" style="display:none"></label><button class="btn danger" onclick="signOutCloud()">Disconnect device</button></div><div id="cloudStatus" class="notice">Checking cloud status…</div><h3>Audit history</h3><div class="list">${db.audit.slice().reverse().slice(0,30).map(a=>`<div class="row"><div><strong>${esc(a.action)}</strong><div class="muted">${esc(a.when)} • ${esc(a.name||'')}</div></div></div>`).join('')||'<p class="muted">No changes recorded yet.</p>'}</div></div>`; updateCloudStatus();}
+function openCustomer(){document.getElementById('form').reset();document.getElementById('editId').value='';document.getElementById('customerId').value='';document.getElementById('rxdate').value=new Date().toISOString().slice(0,10);setupChoices();document.getElementById('modalTitle').textContent='New Customer & Prescription';document.getElementById('modal').classList.add('show')}
+function newVisit(id){openCustomer();document.getElementById('customerId').value=id;let c=db.customers.find(x=>x.id===id);document.getElementById('name').value=c.name;document.getElementById('phone').value=c.phone;document.getElementById('email').value=c.email||'';document.getElementById('dob').value=c.dob||'';document.getElementById('address').value=c.address||''}
+function editCustomer(id){let c=db.customers.find(x=>x.id===id);openCustomer();document.getElementById('modalTitle').textContent='Edit Customer';document.getElementById('editId').value=id;['name','phone','email','dob','address'].forEach(k=>document.getElementById(k).value=c[k]||'');}
+function editVisit(cid,vid){let c=db.customers.find(x=>x.id===cid),v=c.visits.find(x=>x.id===vid);openCustomer();document.getElementById('modalTitle').textContent='Edit Prescription / Visit';document.getElementById('customerId').value=cid;document.getElementById('editId').value=cid+'|'+vid;['name','phone','email','dob','address'].forEach(k=>document.getElementById(k).value=c[k]||'');fillVisit(v)}
+function fillVisit(v){let r=v.rx||{};['rxname','rxdate','rxexpiry','doctor','profile','rsph','lsph','rcyl','lcyl','raxis','laxis','radd','ladd','prism','pd','bvd','material','notes','total','paid','issue','status'].forEach(k=>{if(document.getElementById(k))document.getElementById(k).value=(r[k]??v[k]??'')});setChoices('lensTypes',r.lensType||[]);setChoices('recs',r.recs||[]);document.getElementById('reminder').checked=!!r.reminder;if(v.photo)document.getElementById('photo').dataset.existing=v.photo}
+function setupChoices(){setChoices('lensTypes',[]);setChoices('recs',[])}
+function setChoices(id,selected){let arr=id==='lensTypes'?lensTypes:recs;document.getElementById(id).innerHTML=arr.map(x=>`<button type="button" class="choice ${selected.includes(x)?'on':''}" data-v="${esc(x)}">${esc(x)}</button>`).join('');document.getElementById(id).querySelectorAll('.choice').forEach(b=>b.onclick=()=>b.classList.toggle('on'))}
+function chosen(id){return [...document.querySelectorAll('#'+id+' .choice.on')].map(x=>x.dataset.v)}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+document.getElementById('form').onsubmit=async e=>{
+ e.preventDefault();
+ const edit=document.getElementById('editId').value, cid=document.getElementById('customerId').value;
+ let c=cid?db.customers.find(x=>x.id===cid):null;
+ if(!c){c={id:crypto.randomUUID(),name:'',phone:'',email:'',dob:'',address:'',visits:[]};db.customers.push(c)}
+ c.name=document.getElementById('name').value.trim();c.phone=document.getElementById('phone').value.trim();c.email=document.getElementById('email').value;c.dob=document.getElementById('dob').value;c.address=document.getElementById('address').value;
+ const customerOnly=edit && !edit.includes('|');
+ if(!customerOnly){
+  let vid=edit.includes('|')?edit.split('|')[1]:crypto.randomUUID(), old=c.visits.find(v=>v.id===vid);
+  let photo=document.getElementById('photo').dataset.existing||'';
+  const file=document.getElementById('photo').files[0]; if(file) photo=await new Promise(res=>{let r=new FileReader();r.onload=()=>res(r.result);r.readAsDataURL(file)});
+  const r={id:vid,name:document.getElementById('rxname').value,rxdate:document.getElementById('rxdate').value,rxexpiry:document.getElementById('rxexpiry').value,doctor:document.getElementById('doctor').value,profile:document.getElementById('profile').value,reminder:document.getElementById('reminder').checked,lensType:chosen('lensTypes'),rsph:document.getElementById('rsph').value,lsph:document.getElementById('lsph').value,rcyl:document.getElementById('rcyl').value,lcyl:document.getElementById('lcyl').value,raxis:document.getElementById('raxis').value,laxis:document.getElementById('laxis').value,radd:document.getElementById('radd').value,ladd:document.getElementById('ladd').value,prism:document.getElementById('prism').value,pd:document.getElementById('pd').value,bvd:document.getElementById('bvd').value,material:document.getElementById('material').value,recs:chosen('recs')};
+  const v={id:vid,date:r.rxdate||new Date().toISOString().slice(0,10),customerName:c.name,rx:r,notes:document.getElementById('notes').value,total:+document.getElementById('total').value||0,paid:+document.getElementById('paid').value||0,issue:document.getElementById('issue').value,status:document.getElementById('status').value,photo};
+  if(old){Object.assign(old,v);db.audit.push({when:new Date().toLocaleString(),action:'Edited prescription/order',name:c.name})}else{c.visits.push(v);db.audit.push({when:new Date().toLocaleString(),action:'Created customer/visit',name:c.name})}
+ }else db.audit.push({when:new Date().toLocaleString(),action:'Edited customer details',name:c.name});
+ persist();
+ closeModal();
+ viewCustomer(c.id);
+ try{await syncCustomerCloud(c); updateCloudStatus('Record saved to cloud ✓');}
+ catch(err){console.error(err); alert('Record was saved on this device, but cloud sync failed: '+err.message);}
+};
+function backupJSON(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='DUA-OPTICS-backup-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function restoreJSON(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x.customers||!x.audit)throw 0;db=x;persist();alert('Backup restored successfully.');page('dashboard')}catch{alert('Invalid DUA OPTICS backup file.')}};r.readAsText(f)}
+setupChoices(); page('dashboard'); initCloud();
+</script>
+<script>if("serviceWorker" in navigator){navigator.serviceWorker.register("./sw.js").catch(()=>{});}</script></body></html>
